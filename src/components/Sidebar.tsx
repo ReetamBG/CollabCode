@@ -30,7 +30,7 @@ export default function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className="bg-background">
         <SidebarGroup>
           <SidebarGroupLabel className="flex justify-between">
             <span>Explorer</span>{" "}

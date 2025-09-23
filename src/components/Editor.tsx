@@ -15,7 +15,7 @@ export default function EditorComponent() {
       <Editor
         height="100vh"
         defaultValue=""
-        // theme="vs-dark" 
+        theme="vs-dark" 
         path={currentFile.name}
         language={currentFile.language}
         value={currentFile.value}

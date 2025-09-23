@@ -1,9 +1,5 @@
 "use client"
 
-// TODO: make a tree type storing everything 
-// TODO: use Folder and FileTree type only for UI, use File type for actual use
-// TODO: use fileId and folderId instead of actual object and use lookup from files[] to get actual object
-
 import { create } from 'zustand'
 import * as monaco from 'monaco-editor';
 import { v4 as uuidv4 } from 'uuid';
