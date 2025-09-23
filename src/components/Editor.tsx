@@ -3,7 +3,7 @@
 import { Editor  } from "@monaco-editor/react";
 import useFilesStore from "@/store/files.store";
 
-export default function Home() {
+export default function EditorComponent() {
   const {currentFile, updateCurrentFile} = useFilesStore();
 
   if (!currentFile) {
@@ -11,6 +11,7 @@ export default function Home() {
   }
   return (
     <>
+      {currentFile.name}
       <Editor
         height="100vh"
         defaultValue=""
