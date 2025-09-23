@@ -67,7 +67,7 @@ const RenameFileDialog = ({ open, setOpen, fileId }: { open: boolean, setOpen: (
             placeholder="Enter file name"
           />
           <DialogFooter className="sm:justify-start">
-            <Button type="submit" variant="secondary">
+            <Button type="submit" variant="default">
               Rename
             </Button>
           </DialogFooter>

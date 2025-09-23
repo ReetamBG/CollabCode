@@ -1,7 +1,8 @@
 "use client"
 
 import { create } from 'zustand'
-import * as monaco from 'monaco-editor';
+// import * as monaco from 'monaco-editor';   // causes some problem with nextjs build. have to manually map file extensions to languages
+import { getLanguageFromExtension } from '@/lib/utils';   // using this manual mapping instead for now
 import { v4 as uuidv4 } from 'uuid';
 
 export interface File {
@@ -72,8 +73,10 @@ const useFilesStore = create<Store>()((set, get) => ({
     const ext = fileName.split(".").pop()?.toLowerCase();
     let language = "plaintext";
     if (ext) {
-      const association = monaco.languages.getLanguages();
-      language = association.find(l => l.extensions?.includes(`.${ext}`))?.id || "plaintext";
+      // const association = monaco.languages.getLanguages();
+      // language = association.find(l => l.extensions?.includes(`.${ext}`))?.id || "plaintext";
+      // above code causes some problem with nextjs build. have to manually map file extensions to languages
+      language = getLanguageFromExtension(ext); 
     }
 
     const newFile: File = {
@@ -258,8 +261,11 @@ const useFilesStore = create<Store>()((set, get) => ({
     const ext = newName.split(".").pop()?.toLowerCase();
     let language = "plaintext";
     if (ext) {
-      const association = monaco.languages.getLanguages();
-      language = association.find(l => l.extensions?.includes(`.${ext}`))?.id || "plaintext";
+      // const association = monaco.languages.getLanguages();
+      // language = association.find(l => l.extensions?.includes(`.${ext}`))?.id || "plaintext";
+
+      // above code causes some problem with nextjs build. have to manually map file extensions to languages
+      language = getLanguageFromExtension(ext);
     }
 
     // Update file

@@ -102,7 +102,7 @@ const AddFileDialog = ({ open, setOpen, parentFolder }: AddDialogProps) => {
             placeholder="Enter file name"
           />
           <DialogFooter className="sm:justify-start">
-            <Button type="submit" variant="secondary">
+            <Button type="submit" variant="default">
               Add
             </Button>
           </DialogFooter>
@@ -140,7 +140,7 @@ const AddFolderDialog = ({ open, setOpen, parentFolder }: AddDialogProps) => {
             placeholder="Enter folder name"
           />
           <DialogFooter className="sm:justify-start">
-            <Button type="submit" variant="secondary">
+            <Button type="submit" variant="default">
               Add
             </Button>
           </DialogFooter>
@@ -178,7 +178,7 @@ const RenameFolderDialog = ({ open, setOpen, folderId }: { open: boolean, setOpe
             placeholder="Enter folder name"
           />
           <DialogFooter className="sm:justify-start">
-            <Button type="submit" variant="secondary">
+            <Button type="submit" variant="default">
               Rename
             </Button>
           </DialogFooter>

@@ -103,7 +103,7 @@ function AddFileButton() {
             placeholder="Enter file name"
           />
           <DialogFooter className="sm:justify-start">
-            <Button type="submit" variant="secondary">
+            <Button type="submit" variant="default">
               Add
             </Button>
           </DialogFooter>
@@ -156,7 +156,7 @@ function AddFolderButton() {
             placeholder="Enter folder name"
           />
           <DialogFooter className="sm:justify-start">
-            <Button type="submit" variant="secondary">
+            <Button type="submit" variant="default">
               Add
             </Button>
           </DialogFooter>
