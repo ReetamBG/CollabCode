@@ -44,7 +44,10 @@ const EditorTabs = () => {
               }`}
           >
             <span className="text-sm flex items-center gap-2"><Icon color={color} size={12} />{file.name}</span>  
-            <button onClick={()=> removeFileFromOpenedEditors(file)} className="cursor-pointer hover:bg-foreground/20 p-1 rounded-full"><X size={10} /></button>
+            <button onClick={(e)=> {
+              e.stopPropagation();   // prevents the click event from bubbling up to the parent div reopening the tab
+              removeFileFromOpenedEditors(file);
+            }} className="cursor-pointer hover:bg-foreground/20 p-1 rounded-full"><X size={10} /></button>
           </div>
         )
       })}

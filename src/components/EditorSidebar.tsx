@@ -24,6 +24,7 @@ import { DialogHeader, DialogFooter } from "./ui/dialog";
 import { Input } from "./ui/input";
 import SidebarFile from "./EditorSidebarFile";
 import SidebarFolder from "./EditorSidebarFolder";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 
 type SidebarNavItem = "Menu" | "Explorer" | "Search"
@@ -31,7 +32,6 @@ type SidebarNavItem = "Menu" | "Explorer" | "Search"
 export default function EditorSidebar() {
   const [activeSidebarItem, setActiveSidebarItem] = useState<SidebarNavItem>("Menu")
   const sidebarNavItems = [
-    { name: "Menu", icon: <Menu /> },
     { name: "Explorer", icon: <Files /> },
     { name: "Search", icon: <SearchIcon /> }
   ]
@@ -73,24 +73,52 @@ const SidebarNav = ({ activeSidebarItem, setActiveSidebarItem, sidebarNavItems }
 
   return (
     <div className="mt-12 w-14 flex flex-col items-center border-r-1  z-100 bg-background">
+      {/* file options */}
+      <Tooltip>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <TooltipTrigger asChild>
+              <button
+                // onClick={() => handleClick(item)}
+                className="grid place-content-center hover:bg-foreground/10 w-14 h-14 cursor-pointer"
+                title="Menu"
+              >
+                <Menu />
+              </button>
+            </TooltipTrigger>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="z-100">
+            {/* <DropdownMenuLabel>File options</DropdownMenuLabel> */}
+            {/* <DropdownMenuSeparator /> */}
+            <DropdownMenuItem>Save</DropdownMenuItem>
+            <DropdownMenuItem>Save as...</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <TooltipContent side="right" className="z-100">
+          <p>Menu</p>
+        </TooltipContent>
+      </Tooltip>
+
+      {/* rest of the nav items */}
       {sidebarNavItems.map((item) => (
-        <Tooltip key={item.name}>
-          <TooltipTrigger asChild>
-            <button
-              key={item.name}
-              onClick={() => handleClick(item)}
-              className={`grid place-content-center hover:bg-foreground/10 w-14 h-14 cursor-pointer ${activeSidebarItem === item.name ? "bg-foreground/10" : ""}`}
-              title={item.name}
-            >
-              {item.icon}
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="right" className="z-100">
-            <p>{item.name}</p>
-          </TooltipContent>
-        </Tooltip>
-      ))}
-    </div>
+          <Tooltip key={item.name}>
+            <TooltipTrigger asChild>
+              <button
+                key={item.name}
+                onClick={() => handleClick(item)}
+                className={`grid place-content-center hover:bg-foreground/10 w-14 h-14 cursor-pointer ${activeSidebarItem === item.name ? "bg-foreground/10" : ""}`}
+                title={item.name}
+              >
+                {item.icon}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="z-100">
+              <p>{item.name}</p>
+            </TooltipContent>
+          </Tooltip>
+        ))
+      }
+    </div >
   )
 }
 const Explorer = () => {

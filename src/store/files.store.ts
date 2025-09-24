@@ -62,9 +62,20 @@ const useFilesStore = create<Store>()((set, get) => ({
   },
 
   removeFileFromOpenedEditors: (file: File) => {
-    set(state => ({ openedEditors: state.openedEditors.filter(f => f.id !== file.id) }));
-    if(get().currentFile?.id === file.id || get().openedEditors.length === 0) {
-      set({ currentFile: null });
+    const currentOpenedEditors = get().openedEditors;
+    const updatedOpenedEditors = currentOpenedEditors.filter(f => f.id !== file.id);
+    set(() => ({ openedEditors: updatedOpenedEditors }));
+
+    // if current file is closed, handle the currentFile update
+    if (get().currentFile?.id === file.id) {
+      // if there are still opened editors, set currentFile to the last one
+      if (updatedOpenedEditors.length > 0) {
+        set({ currentFile: updatedOpenedEditors[updatedOpenedEditors.length - 1] });
+      }
+      // if no open editors left, set currentFile to null
+      else {
+        set({ currentFile: null });
+      }
     }
   },
 
@@ -94,7 +105,7 @@ const useFilesStore = create<Store>()((set, get) => ({
       // const association = monaco.languages.getLanguages();
       // language = association.find(l => l.extensions?.includes(`.${ext}`))?.id || "plaintext";
       // above code causes some problem with nextjs build. have to manually map file extensions to languages
-      language = getLanguageFromExtension(ext); 
+      language = getLanguageFromExtension(ext);
     }
 
     const newFile: File = {
@@ -128,13 +139,17 @@ const useFilesStore = create<Store>()((set, get) => ({
 
     // update files array
     set(state => ({ files: [...state.files, newFile] }));
+
+    if (!get().currentFile) {
+      set({ currentFile: newFile, openedEditors: [newFile] });
+    }
   },
 
   createNewFolder: (folderName: string, parentFolder?: Folder) => {
     if (!folderName) return
 
     console.log("Creating folders")
-    
+
     const newFolder: Folder = {
       id: uuidv4(),
       name: folderName,
@@ -142,7 +157,7 @@ const useFilesStore = create<Store>()((set, get) => ({
       folders: [],
       parentFolder: parentFolder ? parentFolder.id : undefined
     }
-    
+
     if (parentFolder) {
       // ensure folder name unique inside the parent folder
       if (parentFolder.folders.find(fId => get().folders.find(f => f.id === fId)?.name === folderName)) {
@@ -157,10 +172,10 @@ const useFilesStore = create<Store>()((set, get) => ({
       // ensure folder name unique in root
       if (get().folders.find(f => f.name === folderName)) {
         alert("Folder with this name already exists in root");
-        return; 
+        return;
       }
       // add it to fileTree (if a folder is inside a folder its handled there recursively so no need to handle it here)
-      set(state => ({ fileTree: { ...state.fileTree, folders: [...state.fileTree.folders, newFolder.id] } }) );
+      set(state => ({ fileTree: { ...state.fileTree, folders: [...state.fileTree.folders, newFolder.id] } }));
     }
 
     // update folders array
@@ -288,7 +303,7 @@ const useFilesStore = create<Store>()((set, get) => ({
 
     // Update file
     set(state => ({
-      files: state.files.map(f => 
+      files: state.files.map(f =>
         f.id === fileId ? { ...f, name: newName, language } : f
       )
     }));
@@ -331,7 +346,7 @@ const useFilesStore = create<Store>()((set, get) => ({
 
     // Update folder
     set(state => ({
-      folders: state.folders.map(f => 
+      folders: state.folders.map(f =>
         f.id === folderId ? { ...f, name: newName } : f
       )
     }));
