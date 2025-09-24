@@ -31,8 +31,11 @@ type Store = {
   fileTree: FileTree;
   files: File[];
   folders: Folder[];
+  openedEditors: File[];
   currentFile: File | null;
   setCurrentFile: (file: File) => void;
+  addFileToOpenedEditors: (file: File) => void;
+  removeFileFromOpenedEditors: (file: File) => void;
   updateCurrentFile: (value: string) => void;
   createNewFile: (fileName: string, parentFolder?: Folder) => void;
   createNewFolder: (folderName: string, parentFolder?: Folder) => void;
@@ -46,9 +49,24 @@ const useFilesStore = create<Store>()((set, get) => ({
   fileTree: { files: [], folders: [] },
   files: [],
   folders: [],
+  openedEditors: [],
   currentFile: null,
 
   setCurrentFile: (file: File) => set(() => ({ currentFile: file })),
+
+  addFileToOpenedEditors: (file: File) => {
+    const exists = get().openedEditors.find(f => f.id === file.id);
+    if (!exists) {
+      set(state => ({ openedEditors: [...state.openedEditors, file] }));
+    }
+  },
+
+  removeFileFromOpenedEditors: (file: File) => {
+    set(state => ({ openedEditors: state.openedEditors.filter(f => f.id !== file.id) }));
+    if(get().currentFile?.id === file.id || get().openedEditors.length === 0) {
+      set({ currentFile: null });
+    }
+  },
 
   updateCurrentFile: (value: string) => {
     // update currentFile 

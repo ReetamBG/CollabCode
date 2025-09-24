@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, FolderIcon } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import React, { FormEvent, useState } from 'react'
 import useFilesStore, { Folder } from "@/store/files.store"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from './ui/context-menu'
@@ -7,8 +7,9 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible'
 import { SidebarMenuButton, SidebarMenuSub, SidebarMenuSubItem } from '@/components/ui/sidebar'
-import SidebarFile from './SidebarFile'
+import SidebarFile from './EditorSidebarFile'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,  } from './ui/alert-dialog'
+import { RiFolderFill, RiFolderOpenFill } from "react-icons/ri";
 
 const SidebarFolder = ({ folderId }: { folderId: string }) => {
   const [expandFolder, setExpandFolder] = useState(false)
@@ -28,7 +29,10 @@ const SidebarFolder = ({ folderId }: { folderId: string }) => {
             {/* folder */}
             <ContextMenu>
               <ContextMenuTrigger className='w-full cursor-pointer'>
-                <div className="select-none flex gap-2"><FolderIcon size={20} />{folder.name}</div>
+                <div className="select-none flex gap-2 items-center">
+                  {expandFolder ? <RiFolderOpenFill color="#fbbf24" size={18} /> : <RiFolderFill color="#fbbf24" size={18} />}
+                  {folder.name}
+                </div>
               </ContextMenuTrigger>
               <ContextMenuContent>
                 <ContextMenuItem onClick={() => setShowNewFileDialog(true)}>New file...</ContextMenuItem>

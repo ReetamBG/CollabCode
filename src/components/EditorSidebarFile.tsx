@@ -1,16 +1,16 @@
-import { FileIcon } from 'lucide-react'
 import React, { FormEvent, useState } from 'react'
 import useFilesStore from "@/store/files.store"
 import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from '@/components/ui/context-menu';
 import { SidebarMenuButton } from './ui/sidebar';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
-import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from '@radix-ui/react-alert-dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog';
 import { AlertDialogHeader, AlertDialogFooter } from './ui/alert-dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { getFileIconFromExtension } from '@/lib/utils';
 
 const SidebarFile = ({ fileId }: { fileId: string }) => {
-  const { setCurrentFile, currentFile } = useFilesStore();
+  const { setCurrentFile, currentFile, addFileToOpenedEditors } = useFilesStore();
 
   const [showRenameFileDialog, setShowRenameFileDialog] = useState(false)
   const [deleteFileAlertOpen, setDeleteFileAlertOpen] = useState(false)
@@ -18,12 +18,27 @@ const SidebarFile = ({ fileId }: { fileId: string }) => {
   const { files } = useFilesStore()
   const file = files.find(f => f.id === fileId)!
 
+  const fileExt = file.name.split(".").pop()?.toLowerCase();
+  const {icon: Icon, color} = getFileIconFromExtension(fileExt || "");
+
   return (
     <>
-      <SidebarMenuButton className={`cursor-pointer ${file.id === currentFile?.id ? 'bg-muted' : ''}`} onClick={() => setCurrentFile(file)}>
+      <SidebarMenuButton 
+      className={`cursor-pointer ${file.id === currentFile?.id ? 'bg-muted' : ''}`}
+       onClick={
+        () => {
+          setCurrentFile(file)
+          addFileToOpenedEditors(file)
+        }
+
+      }
+       >
         <ContextMenu>
           <ContextMenuTrigger className='w-full'>
-            <div className="select-none cursor-pointer flex gap-2"><FileIcon size={20} />{file.name}</div>
+            <div className="select-none cursor-pointer flex gap-2 items-center">
+              <Icon color={color} size={15} />
+              {file.name}
+              </div>
           </ContextMenuTrigger>
           <ContextMenuContent>
             <ContextMenuItem onClick={() => setDeleteFileAlertOpen(true)}>Delete</ContextMenuItem>

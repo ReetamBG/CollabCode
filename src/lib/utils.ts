@@ -1,5 +1,12 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { IconType } from "react-icons";
+import { 
+  SiJavascript, SiTypescript, SiReact, SiPython,  SiGo, SiRust, 
+  SiPhp, SiRuby, SiC, SiCplusplus, SiHtml5, SiCss3, SiMarkdown 
+} from "react-icons/si";
+import { FiFile } from "react-icons/fi"; // generic file icon
+
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -97,4 +104,28 @@ export function getLanguageFromExtension(ext: string): string {
 
   return map[ext.toLowerCase()] || "plaintext";
 }
-      
+
+type IconWithColor = { icon: IconType; color: string };
+
+export function getFileIconFromExtension(ext: string): IconWithColor {
+  const map: Record<string, IconWithColor> = {
+    js:   { icon: SiJavascript, color: "#F7DF1E" },
+    ts:   { icon: SiTypescript, color: "#3178C6" },
+    tsx:  { icon: SiReact,      color: "#61DAFB" },
+    jsx:  { icon: SiReact,      color: "#61DAFB" },
+    py:   { icon: SiPython,     color: "#3776AB" },
+    // java: { icon: SiJava,       color: "#007396" },
+    go:   { icon: SiGo,         color: "#00ADD8" },
+    rs:   { icon: SiRust,       color: "#FF4B33" },
+    php:  { icon: SiPhp,        color: "#777BB4" },
+    rb:   { icon: SiRuby,       color: "#CC342D" },
+    c:    { icon: SiC,          color: "#A8B9CC" },
+    cpp:  { icon: SiCplusplus,  color: "#00599C" },
+    html: { icon: SiHtml5,      color: "#E34F26" },
+    css:  { icon: SiCss3,       color: "#1572B6" },
+    scss: { icon: SiCss3,       color: "#CC6699" },
+    md:   { icon: SiMarkdown,   color: "#000000" },
+  };
+
+  return map[ext.toLowerCase()] || { icon: FiFile, color: "#808080" };
+}
